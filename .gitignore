@@ -1,0 +1,7 @@
+build/
+__pycache__
+~
+*.ass
+!tests/*/*.ass
+*.spec
+*.html
