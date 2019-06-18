@@ -93,60 +93,60 @@ Dialogue: 0,0:01:40.81,0:01:42.84,Default,,0,0,0,,line4
 
 $ cat local.ass
 [Script Info]
-PlayResX: **1920**
+PlayResX: <b>1920</b>
 PlayResY: 576
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Default,**Arial**,40,&H00FFFFFF,&H000000FF,&H00000000,&HA0000000,-1,0,0,0,100,100,0,0,1,1.92,0.8,2,120,120,32,1
-Style: Default-alt,Gandhi Sans,**45**,&H00FFFFFF,&H000000FF,&H00481E14,&HA05A1613,-1,0,0,0,100,100,0,0,1,1.92,0.8,2,120,120,32,1
+Style: Default,<b>Arial</b>,40,&H00FFFFFF,&H000000FF,&H00000000,&HA0000000,-1,0,0,0,100,100,0,0,1,1.92,0.8,2,120,120,32,1
+Style: Default-alt,Gandhi Sans,<b>45</b>,&H00FFFFFF,&H000000FF,&H00481E14,&HA05A1613,-1,0,0,0,100,100,0,0,1,1.92,0.8,2,120,120,32,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
-Dialogue: 0,0:01:34.14,0:01:37.20,Default,,**10**,**10**,**10**,,**changed line1**
+Dialogue: 0,0:01:34.14,0:01:37.20,Default,,<b>10</b>,<b>10</b>,<b>10</b>,,<b>changed line1</b>
 Dialogue: 0,0:01:37.20,0:01:38.85,Default,,0,0,0,,line2
-Dialogue: 0,0:01:38.85,0:01:40.81,Default,,0,0,0,,**line3 changed locally**
+Dialogue: 0,0:01:38.85,0:01:40.81,Default,,0,0,0,,<b>line3 changed locally</b>
 Dialogue: 0,0:01:40.81,0:01:42.84,Default,,0,0,0,,line4
 
 $ cat remote.ass
 [Script Info]
-PlayResX: **1280**
-PlayResY: **1080**
+PlayResX: <b>1280</b>
+PlayResY: <b>1080</b>
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Default,**Helvetica**,40,&H00FFFFFF,&H000000FF,&H00000000,&HA0000000,-1,0,0,0,100,100,0,0,1,1.92,0.8,2,120,120,32,1
-Style: Default-alt,Gandhi Sans,40,&H00FFFFFF,&H000000FF,&H00481E14,&HA05A1613,**0**,0,0,0,100,100,0,0,1,1.92,0.8,2,120,120,32,1
+Style: Default,<b>Helvetica</b>,40,&H00FFFFFF,&H000000FF,&H00000000,&HA0000000,-1,0,0,0,100,100,0,0,1,1.92,0.8,2,120,120,32,1
+Style: Default-alt,Gandhi Sans,40,&H00FFFFFF,&H000000FF,&H00481E14,&HA05A1613,<b>0</b>,0,0,0,100,100,0,0,1,1.92,0.8,2,120,120,32,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
-Dialogue: **5**,**0:01:34.20,0:01:37.30**,Default,,0,0,0,,line1
+Dialogue: <b>5</b>,<b>0:01:34.20,0:01:37.30</b>,Default,,0,0,0,,line1
 Dialogue: 0,0:01:37.20,0:01:38.85,Default,,0,0,0,,line2
-Dialogue: 0,0:01:38.85,0:01:40.81,Default,,0,0,0,,**line3 changed in remote**
+Dialogue: 0,0:01:38.85,0:01:40.81,Default,,0,0,0,,<b>line3 changed in remote</b>
 Dialogue: 0,0:01:40.81,0:01:42.84,Default,,0,0,0,,line4
 
 $ python assdiff3.py local.ass original.ass remote.ass
 [Script Info]
-PlayResX: **1920**
-PlayResY: **1080**
+PlayResX: <b>1920</b>
+PlayResY: <b>1080</b>
 
 [Aegisub Project Garbage]
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: **Own$Default**,**Arial**,40,&H00FFFFFF,&H000000FF,&H00000000,&HA0000000,-1,0,0,0,100,100,0,0,1,1.92,0.8,2,120,120,32,1
-Style: **Other$Default**,**Helvetica**,40,&H00FFFFFF,&H000000FF,&H00000000,&HA0000000,-1,0,0,0,100,100,0,0,1,1.92,0.8,2,120,120,32,1
-Style: Default-alt,Gandhi Sans,**45**,&H00FFFFFF,&H000000FF,&H00481E14,&HA05A1613,**0**,0,0,0,100,100,0,0,1,1.92,0.8,2,120,120,32,1
+Style: <b>Own$Default</b>,<b>Arial</b>,40,&H00FFFFFF,&H000000FF,&H00000000,&HA0000000,-1,0,0,0,100,100,0,0,1,1.92,0.8,2,120,120,32,1
+Style: <b>Other$Default</b>,<b>Helvetica</b>,40,&H00FFFFFF,&H000000FF,&H00000000,&HA0000000,-1,0,0,0,100,100,0,0,1,1.92,0.8,2,120,120,32,1
+Style: Default-alt,Gandhi Sans,<b>45</b>,&H00FFFFFF,&H000000FF,&H00481E14,&HA05A1613,<b>0</b>,0,0,0,100,100,0,0,1,1.92,0.8,2,120,120,32,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
-**Comment: 0,0:00:00.00,0:00:00.00,Default,,0,0,0,CONFLICT,Style conflict detected. Please resolve the conflict through the style manager.**
-Dialogue: **5**,**0:01:34.20,0:01:37.30**,Default,,**10**,**10**,**10**,,**changed line1**
+<b>Comment: 0,0:00:00.00,0:00:00.00,Default,,0,0,0,CONFLICT,Style conflict detected. Please resolve the conflict through the style manager.</b>
+Dialogue: <b>5</b>,<b>0:01:34.20,0:01:37.30</b>,Default,,<b>10</b>,<b>10</b>,<b>10</b>,,<b>changed line1</b>
 Dialogue: 0,0:01:37.20,0:01:38.85,Default,,0,0,0,,line2
-**Comment: 0,0:00:00.00,0:00:00.00,Default,,0,0,0,CONFLICT,Start of own hunk**
-Dialogue: 0,0:01:38.85,0:01:40.81,Default,,0,0,0,,**line3 changed locally**
-**Comment: 0,0:00:00.00,0:00:00.00,Default,,0,0,0,CONFLICT,End of own hunk; Start of other hunk**
-Dialogue: 0,0:01:38.85,0:01:40.81,Default,,0,0,0,,**line3 changed in remote**
-**Comment: 0,0:00:00.00,0:00:00.00,Default,,0,0,0,CONFLICT,End of other hunk**
+<b>Comment: 0,0:00:00.00,0:00:00.00,Default,,0,0,0,CONFLICT,Start of own hunk</b>
+Dialogue: 0,0:01:38.85,0:01:40.81,Default,,0,0,0,,<b>line3 changed locally</b>
+<b>Comment: 0,0:00:00.00,0:00:00.00,Default,,0,0,0,CONFLICT,End of own hunk; Start of other hunk</b>
+Dialogue: 0,0:01:38.85,0:01:40.81,Default,,0,0,0,,<b>line3 changed in remote</b>
+<b>Comment: 0,0:00:00.00,0:00:00.00,Default,,0,0,0,CONFLICT,End of other hunk</b>
 Dialogue: 0,0:01:40.81,0:01:42.84,Default,,0,0,0,,line4
 </pre>
