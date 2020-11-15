@@ -8,7 +8,35 @@ import io
 import re
 import sys
 
+parser = argparse.ArgumentParser(description='Three-way merge of ASS files')
+parser.add_argument('myfile', help="The locally changed file")
+parser.add_argument('oldfile', help="The parent file that both files diverged from")
+parser.add_argument('yourfile', help="The remotely changed file")
+parser.add_argument('--output', '-o', help="File to output to")
+parser.add_argument('--conflict-marker', choices=['diff3', 'description'], default='description',
+                    help="Type of conflict marker to use: diff3-style markers or textual descriptions")
+parser.add_argument('--conflict-marker-size', type=int, default=7,
+                    help="Size of conflict marker when using diff3-style conflict markers")
+parser.add_argument('--diff3', action='store_true', help="Use diff3-style three-way diffing")
+args = parser.parse_args()
+
 CONFLICT_LINE = "Comment: 0,0:00:00.00,0:00:00.00,Default,,0,0,0,CONFLICT,{}"
+
+CONFLICT_MARKERS = {
+    "diff3": {
+        "ours": "<" * args.conflict_marker_size,
+        "ancestor": "|" * args.conflict_marker_size,
+        "theirs": "=" * args.conflict_marker_size,
+        "end": ">" * args.conflict_marker_size
+    },
+    "description": {
+        "ours": "Start of own hunk",
+        "ancestor": "End of own hunk; Start of common ancestor's hunk",
+        "theirs": "End of {} hunk; Start of other hunk".format(
+            "common ancestor's" if args.diff3 else "own"),
+        "end": "End of other hunk"
+    }
+}
 
 class ASSLine(collections.abc.Mapping):
     VALID_TYPES = None
@@ -240,18 +268,23 @@ class LineMatcher:
         return matches
 
 dialogue_conflict = False
-def dialogue_conflict_handler(a_hunk, b_hunk):
+def dialogue_conflict_handler(a_hunk, b_hunk, o_hunk):
     global dialogue_conflict
     dialogue_conflict = True
 
-    yield DialogueLine(CONFLICT_LINE.format("Start of own hunk"))
+    yield DialogueLine(CONFLICT_LINE.format(CONFLICT_MARKERS[args.conflict_marker]["ours"]))
     yield from a_hunk
-    yield DialogueLine(CONFLICT_LINE.format("End of own hunk; Start of other hunk"))
+
+    if args.diff3:
+        yield DialogueLine(CONFLICT_LINE.format(CONFLICT_MARKERS[args.conflict_marker]["ancestor"]))
+        yield from o_hunk
+
+    yield DialogueLine(CONFLICT_LINE.format(CONFLICT_MARKERS[args.conflict_marker]["theirs"]))
     yield from b_hunk
-    yield DialogueLine(CONFLICT_LINE.format("End of other hunk"))
+    yield DialogueLine(CONFLICT_LINE.format(CONFLICT_MARKERS[args.conflict_marker]["end"]))
 
 style_conflict = False
-def style_conflict_handler(a_hunk, b_hunk):
+def style_conflict_handler(a_hunk, b_hunk, o_hunk):
     global style_conflict
     style_conflict = True
 
@@ -291,7 +324,8 @@ def diff3(A, O, B, conflict_handler, **kwargs):
                 yield B[i]
         else:
             yield from conflict_handler((A[i] for i in a_hunk),
-                                        (B[i] for i in b_hunk))
+                                        (B[i] for i in b_hunk),
+                                        (O[i] for i in o_hunk))
 
     o_to_a = map_indices(matches_OA)
     o_to_b = map_indices(matches_OB)
@@ -327,12 +361,6 @@ def diff3(A, O, B, conflict_handler, **kwargs):
 
 def main():
     global style_conflict
-    parser = argparse.ArgumentParser(description='Three-way merge of ASS files')
-    parser.add_argument('myfile', help="The locally changed file")
-    parser.add_argument('oldfile', help="The parent file that both files diverged from")
-    parser.add_argument('yourfile', help="The remotely changed file")
-    parser.add_argument('--output', '-o', help="File to output to")
-    args = parser.parse_args()
 
     mine = parse_file(args.myfile, 'Own')
     parent = parse_file(args.oldfile, 'Parent')
