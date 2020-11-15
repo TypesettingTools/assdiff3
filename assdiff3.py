@@ -420,10 +420,11 @@ def main():
         output.write(str(line) + "\n")
     output.write("\n")
 
-    output.write("[Aegisub Project Garbage]\n")
-    for line in project_garbage:
-        output.write(str(line) + "\n")
-    output.write("\n")
+    if len(project_garbage) > 0:
+        output.write("[Aegisub Project Garbage]\n")
+        for line in project_garbage:
+            output.write(str(line) + "\n")
+        output.write("\n")
 
     output.write("[V4+ Styles]\n")
     output.write("Format: {}".format(", ".join(StyleLine.FIELDS)) + "\n")
