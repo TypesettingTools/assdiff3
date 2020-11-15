@@ -18,6 +18,8 @@ parser.add_argument('--conflict-marker', choices=['diff3', 'description'], defau
 parser.add_argument('--conflict-marker-size', type=int, default=7,
                     help="Size of conflict marker when using diff3-style conflict markers")
 parser.add_argument('--diff3', action='store_true', help="Use diff3-style three-way diffing")
+parser.add_argument('--script-info', choices=['ours', 'theirs'], default='ours',
+                    help="Whether to keep 'our' or 'their' changes for the script info and Aegisub project sections")
 args = parser.parse_args()
 
 CONFLICT_LINE = "Comment: 0,0:00:00.00,0:00:00.00,Default,,0,0,0,CONFLICT,{}"
@@ -169,13 +171,19 @@ def merge_keyval(A, O, B):
                                         if key not in o_map or o_map[key] != value)
     b_removed = {key for key in o_map if key not in b_map}
 
-    # prioritize "our" change
-    for key in b_removed:
+    if args.script_info == 'ours':
+        first_removed, first_changed, second_removed, second_changed = \
+            b_removed, b_changed, a_removed, a_changed
+    else:
+        first_removed, first_changed, second_removed, second_changed = \
+            a_removed, a_changed, b_removed, b_changed
+
+    for key in first_removed:
         o_map.pop(key, None)
-    o_map.update(b_changed)
-    for key in a_removed:
+    o_map.update(first_changed)
+    for key in second_removed:
         o_map.pop(key, None)
-    o_map.update(a_changed)
+    o_map.update(second_changed)
 
     return [KeyValueLine(fields={"Type": key, "Value": value})
             for key, value in o_map.items()]
