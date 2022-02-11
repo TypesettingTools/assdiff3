@@ -446,8 +446,8 @@ def main():
     if args.output is None:
         sys.stdout.buffer.write(output.getvalue().encode('utf-8-sig'))
     else:
-        with open(args.output, 'w', encoding='utf-8-sig') as f:
-            f.write(output.getvalue())
+        with open(args.output, 'wb') as f:
+            f.write(output.getvalue().encode('utf-8-sig'))
 
     if dialogue_conflict or style_conflict:
         sys.exit(1)
