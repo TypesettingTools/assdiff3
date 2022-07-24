@@ -20,6 +20,8 @@ parser.add_argument('--conflict-marker-size', type=int, default=7,
 parser.add_argument('--diff3', action='store_true', help="Use diff3-style three-way diffing")
 parser.add_argument('--script-info', choices=['ours', 'theirs'], default='ours',
                     help="Whether to keep 'our' or 'their' changes for the script info and Aegisub project sections")
+parser.add_argument('--newline', '-n', choices=['LF', 'CRLF'], default='LF',
+                    help="Line ending to enforce. Uses LF if left unset.")
 args = parser.parse_args()
 
 CONFLICT_LINE = "Comment: 0,0:00:00.00,0:00:00.00,Default,,0,0,0,CONFLICT,{}"
@@ -39,6 +41,8 @@ CONFLICT_MARKERS = {
         "end": "End of other hunk"
     }
 }
+
+NEWLINE = args.newline.replace("LF", "\n").replace("CR", "\r")
 
 class ASSLine(collections.abc.Mapping):
     VALID_TYPES = None
@@ -446,7 +450,7 @@ def main():
     if args.output is None:
         sys.stdout.buffer.write(output.getvalue().encode('utf-8-sig'))
     else:
-        with open(args.output, 'w', encoding='utf-8-sig') as f:
+        with open(args.output, 'w', encoding='utf-8-sig', newline=NEWLINE) as f:
             f.write(output.getvalue())
 
     if dialogue_conflict or style_conflict:
