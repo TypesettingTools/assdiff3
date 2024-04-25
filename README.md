@@ -15,6 +15,7 @@ optional arguments:
   -h, --help            show this help message and exit
   --output OUTPUT, -o OUTPUT
                         File to output to
+  --diff3               Use diff3-style three-way diffing
 ```
 
 `assdiff3` performs a three-way merge of Advanced SubStation Alpha (ASS) files.
@@ -59,10 +60,10 @@ This will add the `assdiff3` command to wherever pip installs binaries on your s
 Then configure the merge driver for git:
 ```
 $ git config --global merge.assdiff3.name "Three-way ASS merger"
-$ git config --global merge.assdiff3.driver "'$(which assdiff3)' %A %O %B -o %A"
+$ git config --global merge.assdiff3.driver "'$(which assdiff3)' --diff3 %A %O %B -o %A"
 ```
 Here we use the full path rather than simply `assdiff3` to ensure that the driver will work even if your git client of choice does not have `assdiff3` in its PATH.
-If `assdiff3` is not in your path, either manually specify the full path to it, or use `python -m assdiff3 %A %O %B -o %A` as the driver command instead.
+If `assdiff3` is not in your path, either manually specify the full path to it, or use `python -m assdiff3 --diff3 %A %O %B -o %A` as the driver command instead.
 
 Finally, as on Windows, create a `.gitattributes` file in your repository containing
 ```
@@ -125,7 +126,7 @@ Dialogue: 0,0:01:37.20,0:01:38.85,Default,,0,0,0,,line2
 Dialogue: 0,0:01:38.85,0:01:40.81,Default,,0,0,0,,<b>line3 changed in remote</b>
 Dialogue: 0,0:01:40.81,0:01:42.84,Default,,0,0,0,,line4
 
-$ python assdiff3.py local.ass original.ass remote.ass
+$ python assdiff3.py --diff3 local.ass original.ass remote.ass
 [Script Info]
 PlayResX: <b>1920</b>
 PlayResY: <b>1080</b>
@@ -145,7 +146,9 @@ Dialogue: <b>5</b>,<b>0:01:34.20,0:01:37.30</b>,Default,,<b>10</b>,<b>10</b>,<b>
 Dialogue: 0,0:01:37.20,0:01:38.85,Default,,0,0,0,,line2
 <b>Comment: 0,0:00:00.00,0:00:00.00,Default,,0,0,0,CONFLICT,Start of own hunk</b>
 Dialogue: 0,0:01:38.85,0:01:40.81,Default,,0,0,0,,<b>line3 changed locally</b>
-<b>Comment: 0,0:00:00.00,0:00:00.00,Default,,0,0,0,CONFLICT,End of own hunk; Start of other hunk</b>
+<b>Comment: 0,0:00:00.00,0:00:00.00,Default,,0,0,0,CONFLICT,End of own hunk; Start of common ancestor's hunk</b>
+Dialogue: 0,0:01:38.85,0:01:40.81,Default,,0,0,0,,line3
+<b>Comment: 0,0:00:00.00,0:00:00.00,Default,,0,0,0,CONFLICT,End of common ancestor's hunk; Start of other hunk</b>
 Dialogue: 0,0:01:38.85,0:01:40.81,Default,,0,0,0,,<b>line3 changed in remote</b>
 <b>Comment: 0,0:00:00.00,0:00:00.00,Default,,0,0,0,CONFLICT,End of other hunk</b>
 Dialogue: 0,0:01:40.81,0:01:42.84,Default,,0,0,0,,line4
